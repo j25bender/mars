@@ -69,3 +69,5 @@ app.patch('/api/v1/items/:id', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`App running on ${app.get('port')}`)
 })
+
+module.exports = app
