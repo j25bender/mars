@@ -21,11 +21,12 @@ app.get('/api/v1/items', (request, response) => {
 })
 
 app.post('/api/v1/items', (request, response) => {
-  const { itemToAdd } = request.body
+  const name = request.body
+  const packed = request.body
 
-  database('items').insert({ itemToAdd }, 'id')
+  database('items').insert(name, 'id')
   .then(item => {
-    response.status(201).json({ id: item[0], itemToAdd })
+    response.status(201).json({ id: name[0], name })
   })
   .catch(err => {
     response.status(500).json({ err })

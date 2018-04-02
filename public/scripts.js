@@ -4,7 +4,8 @@ $('#add-item-button').click(async () => {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
-      itemToAdd
+      name: itemToAdd,
+      packed: false
     })
   }
 )
