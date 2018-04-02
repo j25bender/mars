@@ -33,6 +33,22 @@ app.post('/api/v1/items', (request, response) => {
   })
 })
 
+app.delete('/api/v1/items/:id', (request, response) => {
+  database('items').where('id', request.params.id)
+  .select()
+  .del()
+  .then(item => {
+    if(!item.length) {
+      response.status(200).send('Deleted!')
+    } else {
+      response.status(404).send('Item ID does\'t exist')
+    }
+  })
+  .catch(err => {
+    response.status(500).json({ err })
+  })
+})
+
 app.listen(app.get('port'), () => {
   console.log(`App running on ${app.get('port')}`)
 })
