@@ -24,6 +24,11 @@ app.post('/api/v1/items', (request, response) => {
   const name = request.body
   const packed = request.body
 
+  if (!name) {
+    return response.status(422)
+      .send({ error: `Expected: { name: <String> }. You're missing a item name.` });
+  }
+
   database('items').insert(name, 'id')
   .then(item => {
     response.status(201).json({ id: name[0], name })
@@ -49,22 +54,22 @@ app.delete('/api/v1/items/:id', (request, response) => {
   })
 })
 
-app.patch('/api/v1/items/:id', (request, response) => {
-  database('items').where('id', request.params.id)
-  .update({
-    packed: request.body.packed
-  })
-  .then(success => {
-    if(success) {
-      response.status(202).send('Packed updated')
-    } else {
-      response.status(404).send('Not updated')
-    }
-  })
-  .catch(err => {
-    response.status(500).json({ err })
-  })  
-})
+// app.patch('/api/v1/items/:id', (request, response) => {
+//   database('items').where('id', request.params.id)
+//   .update({
+//     packed: request.body.packed
+//   })
+//   .then(success => {
+//     if(success) {
+//       response.status(202).send('Packed updated')
+//     } else {
+//       response.status(404).send('Not updated')
+//     }
+//   })
+//   .catch(err => {
+//     response.status(500).json({ err })
+//   })  
+// })
 
 app.listen(app.get('port'), () => {
   console.log(`App running on ${app.get('port')}`)

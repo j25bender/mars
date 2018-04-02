@@ -41,4 +41,78 @@ describe('API routes', () => {
       })
     })
   })
+
+  describe('POST /api/v1/items', () => {
+
+    beforeEach((done) => {
+      database.migrate.rollback()
+      .then(() => {
+        database.migrate.latest()
+        .then(() => {
+          done()
+        })
+      })
+    })
+
+    it('should POST new items', () => {
+      return chai.request(app)
+      .post('/api/v1/items')
+      .send({
+        name: 'laser-beams',
+        packed: false
+      })
+      .then(response => {
+        response.should.have.status(201)
+        response.should.be.json
+        response.body.should.be.a('object')
+
+        response.body.should.have.property('name')
+        response.body.name.name.should.equal('laser-beams')
+      })
+      .catch(error => {
+        throw error
+      })
+    })
+
+    it('should NOT POST new items if item name missing', () => {
+      return chai.request(app)
+      .post('/api/v1/items')
+      .send({
+        // name: 'laser-beams',
+        // packed: false
+      })
+      .then(response => {
+        response.should.have.status(201)
+        response.should.be.json
+        response.body.should.be.a('object')
+      })
+      .catch(error => {
+        throw error
+      })
+    })
+  })
+    
+  describe('DELETE /api/v1/items/:id', () => {
+    it('should DELETE new items', () => {
+      return chai.request(app)
+      .delete('/api/v1/items/1')
+      .then(response => {
+        response.should.have.status(200)
+      })
+      .catch(error => {
+        throw error
+      })
+    })
+
+    it('should NOT DELETE items with invalid id', () => {
+      return chai.request(app)
+      .delete('/api/v1/items/12341234141')
+      .then(response => {
+        response.should.have.status(500)
+      })
+      .catch(error => {
+        throw error
+      })
+    })
+  })
 })
