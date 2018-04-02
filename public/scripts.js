@@ -16,6 +16,7 @@ $('#add-item-button').click(async () => {
   }
 )
   getItems()
+  $('#item-to-pack').val('')
 })
 
 const getItems = async () => {
@@ -28,8 +29,28 @@ const appendItemCard = (item) => {
   $('#item-container').append(`<div class="item-card">
   <h1>${item.name}</h1>
   <button class=${item.id} onclick=deleteItem() >Delete</button>
-  <input class="checkBox" type="checkbox">
+  <input class=${item.id} id=${item.packed} type="checkbox" onclick=check()>
  </div>`)
+}
+
+const check = () => {
+  $(this).click(async (e) => {
+    const checked = e.target.id
+    if(checked === 'false') {
+      $(e.target).attr('checked', true)            
+    } else {
+      $(e.target).attr('checked', false)            
+    }
+    console.log(checked)
+    const checkThis = e.target.className
+    await fetch(`/api/v1/items/${checkThis}`, {
+      method: 'PATCH',
+      headers: {'Content-Tyep': 'application/json'},
+      body: JSON.stringify({
+        packed: !checked 
+      })
+    })
+  })
 }
 
 const deleteItem = () => {

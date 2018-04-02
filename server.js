@@ -49,6 +49,23 @@ app.delete('/api/v1/items/:id', (request, response) => {
   })
 })
 
+app.patch('/api/v1/items/:id', (request, response) => {
+  database('items').where('id', request.params.id)
+  .update({
+    packed: request.body.packed
+  })
+  .then(success => {
+    if(success) {
+      response.status(202).send('Packed updated')
+    } else {
+      response.status(404).send('Not updated')
+    }
+  })
+  .catch(err => {
+    response.status(500).json({ err })
+  })  
+})
+
 app.listen(app.get('port'), () => {
   console.log(`App running on ${app.get('port')}`)
 })
