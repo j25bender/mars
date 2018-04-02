@@ -1,5 +1,13 @@
-$('#add-item-button').click(() => {
+$('#add-item-button').click(async () => {
   const itemToAdd = $('#item-to-pack').val()
+  await fetch('/api/v1/items', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      itemToAdd
+    })
+  }
+)
   $('#item-container').append(`<div class="item-card">
                                 <h1>${itemToAdd}</h1>
                                 <button class=${itemToAdd} onclick=deleteMe() >Delete</button>
