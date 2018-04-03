@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Share+Tech');
+
 header,
 #item-container {
+  font-family: 'Share Tech', sans-serif;  
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,8 +16,19 @@ hr {
 }
 
 .item-card {
+  text-align: center;
+  padding-top: 10px;
   width: 400px;
   height: 150px;
   border: 1px solid black;
   margin: 20px;
+}
+
+header {
+  background: linear-gradient(black, white);
+}
+
+#item-container {
+  background: linear-gradient(white, #b97442);
+  height: 100vh;
 }
