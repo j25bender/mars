@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Share+Tech');
 
-html {
-  background-color: black;
-}
-
 header,
 #item-container {
   font-family: 'Share Tech', sans-serif;  
