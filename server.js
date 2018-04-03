@@ -21,11 +21,33 @@ app.get('/api/v1/items', (request, response) => {
 })
 
 app.post('/api/v1/items', (request, response) => {
-  const { itemToAdd } = request.body
+  const name = request.body
+  const packed = request.body
 
-  database('items').insert({ itemToAdd }, 'id')
+  if (!name) {
+    return response.status(422)
+      .send({ error: `Expected: { name: <String> }. You're missing a item name.` });
+  }
+
+  database('items').insert(name, 'id')
   .then(item => {
-    response.status(201).json({ id: item[0], itemToAdd })
+    response.status(201).json({ id: name[0], name })
+  })
+  .catch(err => {
+    response.status(500).json({ err })
+  })
+})
+
+app.delete('/api/v1/items/:id', (request, response) => {
+  database('items').where('id', request.params.id)
+  .select()
+  .del()
+  .then(item => {
+    if(!item.length) {
+      response.status(200).send('Deleted!')
+    } else {
+      response.status(404).send('Item ID does\'t exist')
+    }
   })
   .catch(err => {
     response.status(500).json({ err })
@@ -35,3 +57,5 @@ app.post('/api/v1/items', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`App running on ${app.get('port')}`)
 })
+
+module.exports = app
