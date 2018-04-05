@@ -58,7 +58,7 @@ describe('API routes', () => {
       return chai.request(app)
       .post('/api/v1/items')
       .send({
-        name: 'laser-beams',
+        name: 'lasers',
         packed: false
       })
       .then(response => {
@@ -67,7 +67,7 @@ describe('API routes', () => {
         response.body.should.be.a('object')
 
         response.body.should.have.property('name')
-        response.body.name.name.should.equal('laser-beams')
+        response.body.name.name.should.equal('lasers')
       })
       .catch(error => {
         throw error
@@ -82,7 +82,7 @@ describe('API routes', () => {
         // packed: false
       })
       .then(response => {
-        response.should.have.status(201)
+        response.should.have.status(422)
         response.should.be.json
         response.body.should.be.a('object')
       })
@@ -106,9 +106,9 @@ describe('API routes', () => {
 
     it('should NOT DELETE items with invalid id', () => {
       return chai.request(app)
-      .delete('/api/v1/items/12341234141')
+      .delete('/api/v1/items')
       .then(response => {
-        response.should.have.status(500)
+        response.should.have.status(404)
       })
       .catch(error => {
         throw error

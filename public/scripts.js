@@ -22,15 +22,30 @@ $('#add-item-button').click( async () => {
 const getItems = async () => {
   const initialfetch = await fetch('/api/v1/items')
   const items = await initialfetch.json()
+  $('.item-card').remove()  
   items.forEach(item => appendItemCard(item))
 }
 
 const appendItemCard = (item) => {
+  const checked = item.packed === false ? 'checked' : ''
   $('#item-container').append(`<div class="item-card">
   <h2>${item.name}</h2>
   <button class=${item.id} onclick=deleteItem() >Delete</button>
-  <input class=${item.id} id=${item.packed} type="checkbox" >
+  <input class=${item.id} id=${item.packed} type="checkbox" onchange=updateCheck(${item.packed}) ${checked} >
  </div>`)
+}
+
+const updateCheck = (packed) => {
+  $(this).change(async (e) => {
+    const flip = JSON.parse(e.target.id)
+    await fetch('/api/v1/items', {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        packed: !packed
+      })
+    })
+  })
 }
 
 const deleteItem = () => {
@@ -39,7 +54,7 @@ const deleteItem = () => {
     $(deleteThis).parent().remove()
     await fetch(`/api/v1/items/${e.target.className}`, {
       method: 'DELETE',
-      headers: {'Content-Tyep': 'application/json'}
+      headers: {'Content-Type': 'application/json'}
     })
   })
 }
