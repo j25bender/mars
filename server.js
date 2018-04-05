@@ -20,11 +20,21 @@ app.get('/api/v1/items', (request, response) => {
   })
 })
 
+// app.get('/api/v1/items/:id', (request, response) => {
+//   database('items').where('id', request.params.id)
+//   .select()
+//   .then((items) => {
+//     response.status(200).json(items)
+//   })
+//   .catch((err) => {
+//     response.status(500).json({err})
+//   })
+// })
+
 app.post('/api/v1/items', (request, response) => {
   const name = request.body
-  const packed = request.body
 
-  if (!name) {
+  if (!request.body.name) {
     return response.status(422)
       .send({ error: `Expected: { name: <String> }. You're missing a item name.` });
   }
@@ -52,6 +62,22 @@ app.delete('/api/v1/items/:id', (request, response) => {
   .catch(err => {
     response.status(500).json({ err })
   })
+})
+
+app.patch('/api/v1/items', (request, response) => {
+  const flipped = !request.body.packed
+  database('items').where('id', request.body.id)
+    .update({
+      packed: flipped
+    })
+    .then(updated => {
+      if(updated) {
+        response.status(202).send(`Packed status updated to : ${request.body.packed}`)
+      } else {
+        response.status(404).send('Failed to update!')
+      }
+    })
+    .catch(err => response.status(500).json({err}))
 })
 
 app.listen(app.get('port'), () => {
