@@ -115,4 +115,36 @@ describe('API routes', () => {
       })
     })
   })
+
+  describe('PATCH /api/v1/items', () => {
+    it('should PATCH packed status', () => {
+      return chai.request(app)
+      .patch('/api/v1/items')
+      .send({
+        id: 1,
+        packed: true
+      })
+      .then(response => {
+        response.should.have.status(202)
+      })
+      .catch(error => {
+        throw error
+      })
+    })
+
+    it('should NOT PATCH packed status without valid id', () => {
+      return chai.request(app)
+      .patch('/api/v1/items')
+      .send({
+        id: 23321,
+        packed: true
+      })
+      .then(response => {
+        response.should.have.status(404)
+      })
+      .catch(error => {
+        throw error
+      })
+    })
+  })
 })

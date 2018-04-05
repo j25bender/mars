@@ -27,7 +27,8 @@ const getItems = async () => {
 }
 
 const appendItemCard = (item) => {
-  const checked = item.packed === false ? 'checked' : ''
+  const checked = item.packed === 'true' ? 'checked' : ''
+  
   $('#item-container').append(`<div class="item-card">
   <h2>${item.name}</h2>
   <button class=${item.id} onclick=deleteItem() >Delete</button>
@@ -37,12 +38,13 @@ const appendItemCard = (item) => {
 
 const updateCheck = (packed) => {
   $(this).change(async (e) => {
-    const flip = JSON.parse(e.target.id)
+    const itemId = e.target.className
     await fetch('/api/v1/items', {
       method: 'PATCH',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        packed: !packed
+        id: itemId,
+        packed: packed
       })
     })
   })

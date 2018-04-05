@@ -65,10 +65,10 @@ app.delete('/api/v1/items/:id', (request, response) => {
 })
 
 app.patch('/api/v1/items', (request, response) => {
-  console.log(request)
-  database('items').where('packed', request)
+  const flipped = !request.body.packed
+  database('items').where('id', request.body.id)
     .update({
-      packed: true
+      packed: flipped
     })
     .then(updated => {
       if(updated) {
